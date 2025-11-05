@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyDescriptionAttribute(("Generic, extensible JWT & Refresh Token library for ASP.NET Core with User-DTO ma" +
     "pping support."))]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.1.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.1+155cc049a3e782499d407d9aba15ee681fe7e697")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.1+78dbf2fd044fc6283334915263aecac86e63447c")]
 [assembly: System.Reflection.AssemblyProductAttribute("Yunus.JwtKit")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Yunus.JwtKit")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.1.0")]
