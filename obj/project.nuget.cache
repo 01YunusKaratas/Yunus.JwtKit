@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "xChs3hgtigY=",
+  "dgSpecHash": "74AcIR8Mb5E=",
   "success": true,
   "projectFilePath": "C:\\Users\\YUNUS EMRE\\Desktop\\AllProject\\Yunus.JwtKit\\Yunus.JwtKit\\Yunus.JwtKit.csproj",
   "expectedPackageFiles": [
@@ -55,9 +55,9 @@
     "C:\\Users\\YUNUS EMRE\\.nuget\\packages\\system.text.encoding.codepages\\6.0.0\\system.text.encoding.codepages.6.0.0.nupkg.sha512",
     "C:\\Users\\YUNUS EMRE\\.nuget\\packages\\system.text.encodings.web\\8.0.0\\system.text.encodings.web.8.0.0.nupkg.sha512",
     "C:\\Users\\YUNUS EMRE\\.nuget\\packages\\system.threading.channels\\6.0.0\\system.threading.channels.6.0.0.nupkg.sha512",
-    "C:\\Users\\YUNUS EMRE\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.13\\microsoft.aspnetcore.app.ref.8.0.13.nupkg.sha512",
     "C:\\Users\\YUNUS EMRE\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.13\\microsoft.netcore.app.ref.8.0.13.nupkg.sha512",
-    "C:\\Users\\YUNUS EMRE\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.13\\microsoft.windowsdesktop.app.ref.8.0.13.nupkg.sha512"
+    "C:\\Users\\YUNUS EMRE\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.13\\microsoft.windowsdesktop.app.ref.8.0.13.nupkg.sha512",
+    "C:\\Users\\YUNUS EMRE\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.13\\microsoft.aspnetcore.app.ref.8.0.13.nupkg.sha512"
   ],
   "logs": []
 }

@@ -1,10 +1,34 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <!-- Çoklu hedefleme: .NET 8 ve .NET 9 -->
+    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+    <!-- NuGet Metadata -->
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Yunus.JwtKit</PackageId>
+    <Version>1.0.1</Version>
+    <Authors>Yunus Emre KARATAS</Authors>
+    <Company>Yunus.Dev</Company>
+    <Description>Generic, extensible JWT &amp; Refresh Token library for ASP.NET Core with User-DTO mapping support.</Description>
+    <PackageTags>JWT;ASP.NET;Identity;Authentication;Security;RefreshToken</PackageTags>
+    <RepositoryUrl>https://github.com/01YunusKaratas/Yunus.JwtKit</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/01YunusKaratas/Yunus.JwtKit</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+
+    <!-- NuGet UI görünümü için ek -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageReleaseNotes>Added .NET 9.0 support and improved cross-version compatibility.</PackageReleaseNotes>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Models\" />
