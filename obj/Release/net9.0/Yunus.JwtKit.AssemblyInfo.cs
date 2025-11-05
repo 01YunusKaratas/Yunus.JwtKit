@@ -14,11 +14,11 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute(("Generic, extensible JWT & Refresh Token library for ASP.NET Core with User-DTO ma" +
     "pping support."))]
-[assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.1.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.1+155cc049a3e782499d407d9aba15ee681fe7e697")]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.2.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.2+07a035b04c34ec393644948cfc60a116020122ec")]
 [assembly: System.Reflection.AssemblyProductAttribute("Yunus.JwtKit")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Yunus.JwtKit")]
-[assembly: System.Reflection.AssemblyVersionAttribute("1.0.1.0")]
+[assembly: System.Reflection.AssemblyVersionAttribute("1.0.2.0")]
 [assembly: System.Reflection.AssemblyMetadataAttribute("RepositoryUrl", "https://github.com/01YunusKaratas/Yunus.JwtKit")]
 
 // MSBuild WriteCodeFragment sınıfı tarafından oluşturuldu.

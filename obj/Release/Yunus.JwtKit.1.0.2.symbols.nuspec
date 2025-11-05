@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>Yunus.JwtKit</id>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <authors>Yunus Emre KARATAS</authors>
     <license type="expression">MIT</license>
     <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
@@ -32,10 +32,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="C:\Users\YUNUS EMRE\Desktop\AllProject\Yunus.JwtKit\Yunus.JwtKit\bin\Release\net8.0\Yunus.JwtKit.runtimeconfig.json" target="lib\net8.0\Yunus.JwtKit.runtimeconfig.json" />
-    <file src="C:\Users\YUNUS EMRE\Desktop\AllProject\Yunus.JwtKit\Yunus.JwtKit\bin\Release\net8.0\Yunus.JwtKit.dll" target="lib\net8.0\Yunus.JwtKit.dll" />
-    <file src="C:\Users\YUNUS EMRE\Desktop\AllProject\Yunus.JwtKit\Yunus.JwtKit\bin\Release\net9.0\Yunus.JwtKit.runtimeconfig.json" target="lib\net9.0\Yunus.JwtKit.runtimeconfig.json" />
-    <file src="C:\Users\YUNUS EMRE\Desktop\AllProject\Yunus.JwtKit\Yunus.JwtKit\bin\Release\net9.0\Yunus.JwtKit.dll" target="lib\net9.0\Yunus.JwtKit.dll" />
-    <file src="C:\Users\YUNUS EMRE\Desktop\AllProject\Yunus.JwtKit\Yunus.JwtKit\README.md" target="\README.md" />
+    <file src="C:\Users\YUNUS EMRE\Desktop\AllProject\Yunus.JwtKit\Yunus.JwtKit\bin\Release\net8.0\Yunus.JwtKit.pdb" target="lib\net8.0\Yunus.JwtKit.pdb" />
+    <file src="C:\Users\YUNUS EMRE\Desktop\AllProject\Yunus.JwtKit\Yunus.JwtKit\bin\Release\net9.0\Yunus.JwtKit.pdb" target="lib\net9.0\Yunus.JwtKit.pdb" />
   </files>
 </package>
