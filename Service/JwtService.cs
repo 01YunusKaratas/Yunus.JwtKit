@@ -12,84 +12,86 @@ using Yunus.JwtKit.Interface;
 
 namespace Yunus.JwtKit.Service;
 
-public class JwtService<TUser, TUserInfo> : IJwtTokenService<TUser, TUserInfo> where TUser : class,IHasRefreshToken where TUserInfo : class
-{   
+public class JwtService<TUser, TUserInfo> : IJwtTokenService<TUser, TUserInfo> where TUser : class, IHasRefreshToken where TUserInfo : class
+{
     private readonly IConfiguration _configuration;
     private readonly UserManager<TUser> _userManager;
     private readonly ILogger<JwtService<TUser, TUserInfo>> _logger;
 
-    public JwtService( UserManager<TUser> userManager,
-     ILogger<JwtService<TUser, TUserInfo>> logger,IConfiguration configuration)
+    public JwtService(UserManager<TUser> userManager,
+     ILogger<JwtService<TUser, TUserInfo>> logger, IConfiguration configuration)
     {
         _configuration = configuration;
         _userManager = userManager;
         _logger = logger;
     }
 
-     public async Task<string> GenerateAccessTokenAsync(TUser user,Func<TUser,IEnumerable<Claim>>? extraClaims =null)
+    public async Task<string> GenerateAccessTokenAsync(TUser user, Func<TUser, IEnumerable<Claim>>? extraClaims = null)
     {
-    try
-    {
-        //burda appsettingden çekiyor variablea atıyor
-        var jwtSettings = _configuration.GetSection("JwtSettings");// kullan demek orayı
-        var secretKey = jwtSettings["SecretKey"].Trim() ?? throw new InvalidOperationException("JWT SecretKey bulunamadı");
-        var issuer = jwtSettings["Issuer"] ?? throw new InvalidOperationException("JWT Issuer bulunamadı");
-        var audience = jwtSettings["Audience"] ?? throw new InvalidOperationException("JWT Audience bulunamadı");
-        var expiryMinutes = int.Parse(jwtSettings["AccessTokenExpiryMinutes"] ?? "60");
-        
-        //Şifreleme anahtarını oluştur
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
-        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        Console.WriteLine($" GenerateToken - SecretKey: {secretKey}");
-        Console.WriteLine($" GenerateToken - Issuer: {jwtSettings["Issuer"]}");
-        Console.WriteLine($" GenerateToken - Audience: {jwtSettings["Audience"]}");
-
-
-        var roles = await _userManager.GetRolesAsync(user);
-
-       var claims = new List<Claim>
+        try
         {
-            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),//jwt ıd 
-            new(JwtRegisteredClaimNames.Iat, DateTimeOffset.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)//token unique ıdentity card 
-        };
+            //burda appsettingden çekiyor variablea atıyor
+            var jwtSettings = _configuration.GetSection("JwtSettings");// kullan demek orayı
+            var secretKey = jwtSettings["SecretKey"].Trim() ?? throw new InvalidOperationException("JWT SecretKey bulunamadı");
+            var issuer = jwtSettings["Issuer"] ?? throw new InvalidOperationException("JWT Issuer bulunamadı");
+            var audience = jwtSettings["Audience"] ?? throw new InvalidOperationException("JWT Audience bulunamadı");
+            var expiryMinutes = int.Parse(jwtSettings["AccessTokenExpiryMinutes"] ?? "60");
 
-        if (extraClaims != null)
-        {
-            
-            claims.AddRange(extraClaims(user));
+            //Şifreleme anahtarını oluştur
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            Console.WriteLine($" GenerateToken - SecretKey: {secretKey}");
+            Console.WriteLine($" GenerateToken - Issuer: {jwtSettings["Issuer"]}");
+            Console.WriteLine($" GenerateToken - Audience: {jwtSettings["Audience"]}");
+
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            var claims = new List<Claim>
+            {
+                new(ClaimTypes.NameIdentifier, GetUserId(user)),
+                new(JwtRegisteredClaimNames.Sub, GetUserId(user)),
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),//jwt ıd 
+                new(JwtRegisteredClaimNames.Iat, DateTimeOffset.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)//token unique ıdentity card 
+            };
+
+            if (extraClaims != null)
+            {
+
+                claims.AddRange(extraClaims(user));
+            }
+            // Rolleri claims'e ekle
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+
+
+            var token = new JwtSecurityToken(
+                issuer: issuer,
+                audience: audience,
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(expiryMinutes),
+                signingCredentials: credentials
+            );
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+            // Debug için token'ı decode et
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadJwtToken(tokenString);
+            var userIdClaim = jsonToken.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+            var subClaim = jsonToken.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub)?.Value;
+
+            Console.WriteLine($" Token Generated - NameIdentifier: {userIdClaim}, Sub: {subClaim}");
+            return tokenString;
         }
-        // Rolleri claims'e ekle
-        foreach (var role in roles)
+        catch (Exception ex)
         {
-            claims.Add(new Claim(ClaimTypes.Role, role));
-        } 
-           
-
-
-        var token = new JwtSecurityToken(
-            issuer: issuer,
-            audience: audience,
-            claims: claims,
-            expires: DateTime.Now.AddMinutes(expiryMinutes),
-            signingCredentials: credentials
-        );
-        var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-        
-        // Debug için token'ı decode et
-        var handler = new JwtSecurityTokenHandler();
-        var jsonToken = handler.ReadJwtToken(tokenString);
-        var userIdClaim = jsonToken.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
-        var subClaim = jsonToken.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub)?.Value;
-        
-        Console.WriteLine($" Token Generated - NameIdentifier: {userIdClaim}, Sub: {subClaim}");
-        return tokenString;
+            _logger.LogError($"{ex.Message}", "Token oluşturma hatası");
+            throw;
+        }
     }
-    catch (Exception ex)
-    {
-        _logger.LogError($"{ex.Message}", "Token oluşturma hatası");
-        throw;
-    }
-}
 
     //Random refresh token oluşturur
     public string GenerateRefreshToken()
@@ -100,7 +102,7 @@ public class JwtService<TUser, TUserInfo> : IJwtTokenService<TUser, TUserInfo> w
         return Convert.ToBase64String(randomNumber);
     }
 
-     //Süresi dolmuş token'dan principal bilgilerini alır
+    //Süresi dolmuş token'dan principal bilgilerini alır
     public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
     {
         try
@@ -139,8 +141,8 @@ public class JwtService<TUser, TUserInfo> : IJwtTokenService<TUser, TUserInfo> w
     {
         try
         {
-            return user.RefreshToken == refreshToken && 
-                   user.RefreshTokenExpiryTime.HasValue && 
+            return user.RefreshToken == refreshToken &&
+                   user.RefreshTokenExpiryTime.HasValue &&
                    user.RefreshTokenExpiryTime.Value > DateTime.Now;
         }
         catch (Exception ex)
@@ -161,7 +163,7 @@ public class JwtService<TUser, TUserInfo> : IJwtTokenService<TUser, TUserInfo> w
             user.RefreshTokenExpiryTime = DateTime.Now.AddDays(refreshTokenExpiryDays);
 
             await _userManager.UpdateAsync(user);
-            
+
             _logger.LogInformation("Refresh token kaydedildi");
         }
         catch (Exception ex)
@@ -178,7 +180,7 @@ public class JwtService<TUser, TUserInfo> : IJwtTokenService<TUser, TUserInfo> w
             user.RefreshToken = null;
             user.RefreshTokenExpiryTime = null;
             await _userManager.UpdateAsync(user);
-            
+
             _logger.LogInformation("Refresh token iptal edildi: ");
         }
         catch (Exception ex)
@@ -194,9 +196,9 @@ public class JwtService<TUser, TUserInfo> : IJwtTokenService<TUser, TUserInfo> w
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var jsonToken = tokenHandler.ReadJwtToken(token);
-            
-            return jsonToken.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value ?? 
-                   jsonToken.Claims.FirstOrDefault(x => x.Type == "sub")?.Value ?? 
+
+            return jsonToken.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value ??
+                   jsonToken.Claims.FirstOrDefault(x => x.Type == "sub")?.Value ??
                    string.Empty;
         }
         catch (Exception ex)
@@ -217,11 +219,11 @@ public class JwtService<TUser, TUserInfo> : IJwtTokenService<TUser, TUserInfo> w
             var secretKey = jwtSettings["SecretKey"] ?? throw new InvalidOperationException("JWT SecretKey bulunamadı");
             var issuer = jwtSettings["Issuer"] ?? throw new InvalidOperationException("JWT Issuer bulunamadı");
             var audience = jwtSettings["Audience"] ?? throw new InvalidOperationException("JWT Audience bulunamadı");
-            
+
             Console.WriteLine($"🔑 GenerateToken - SecretKey: {secretKey}");
             Console.WriteLine($"🔑 GenerateToken - Issuer: {jwtSettings["Issuer"]}");
             Console.WriteLine($"🔑 GenerateToken - Audience: {jwtSettings["Audience"]}");
-            
+
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
@@ -280,42 +282,42 @@ public class JwtService<TUser, TUserInfo> : IJwtTokenService<TUser, TUserInfo> w
     }
 
     #region Cookie Operations
-   public void SetAccessTokenCookie(HttpResponse response, string token, int expiryMinutes)
-{
-    var cookieOptions = new CookieOptions
+    public void SetAccessTokenCookie(HttpResponse response, string token, int expiryMinutes)
     {
-        HttpOnly = true, //XSS korumasısssssssss
-        Secure = true,
-        SameSite = SameSiteMode.Lax, // Strict değil, Lax!
-        Expires = DateTime.Now.AddMinutes(expiryMinutes),
-        Path = "/",
-        IsEssential = true
-    };
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true, //XSS korumasısssssssss
+            Secure = true,
+            SameSite = SameSiteMode.Lax, // Strict değil, Lax!
+            Expires = DateTime.Now.AddMinutes(expiryMinutes),
+            Path = "/",
+            IsEssential = true
+        };
 
-    response.Cookies.Append("AccessToken", token, cookieOptions);
-    
-    // Debug için
-    Console.WriteLine($" AccessToken Cookie Set: {token.Substring(0, 20)}...");
-    Console.WriteLine($" Cookie Options: HttpOnly={cookieOptions.HttpOnly}, Secure={cookieOptions.Secure}, SameSite={cookieOptions.SameSite}");
-    
-    _logger.LogInformation("Access token cookie set edildi");
-}
+        response.Cookies.Append("AccessToken", token, cookieOptions);
 
-public void SetRefreshTokenCookie(HttpResponse response, string refreshToken, int expiryDays)
-{
-    var cookieOptions = new CookieOptions
+        // Debug için
+        Console.WriteLine($" AccessToken Cookie Set: {token.Substring(0, 20)}...");
+        Console.WriteLine($" Cookie Options: HttpOnly={cookieOptions.HttpOnly}, Secure={cookieOptions.Secure}, SameSite={cookieOptions.SameSite}");
+
+        _logger.LogInformation("Access token cookie set edildi");
+    }
+
+    public void SetRefreshTokenCookie(HttpResponse response, string refreshToken, int expiryDays)
     {
-        HttpOnly = true,
-        Secure = true,
-        SameSite = SameSiteMode.Lax,
-        Expires = DateTime.Now.AddDays(expiryDays),
-        Path = "/",
-        IsEssential = true
-    };
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Lax,
+            Expires = DateTime.Now.AddDays(expiryDays),
+            Path = "/",
+            IsEssential = true
+        };
 
-    response.Cookies.Append("RefreshToken", refreshToken, cookieOptions);
-    _logger.LogInformation("Refresh token cookie set edildi");
-}
+        response.Cookies.Append("RefreshToken", refreshToken, cookieOptions);
+        _logger.LogInformation("Refresh token cookie set edildi");
+    }
 
 
     public string? GetTokenFromCookie(HttpRequest request, string cookieName)
@@ -333,12 +335,12 @@ public void SetRefreshTokenCookie(HttpResponse response, string refreshToken, in
             Expires = DateTime.Now.AddDays(-1), // Geçmişe tarih vererek sil
             Path = "/",
             IsEssential = true,
-             
+
         };
 
         response.Cookies.Append("AccessToken", "", cookieOptions);
         response.Cookies.Append("RefreshToken", "", cookieOptions);
-        
+
         _logger.LogInformation("Token cookie'leri temizlendi");
     }
 
@@ -347,7 +349,7 @@ public void SetRefreshTokenCookie(HttpResponse response, string refreshToken, in
     #region Helper Methods
 
     //JwtTokenResponse oluşturur
-    public async Task<JwtTokenResponse<TUserInfo>> CreateTokenResponseAsync(TUser user, string accessToken, string refreshToken,Func<TUser, TUserInfo>? mapUser = null)
+    public async Task<JwtTokenResponse<TUserInfo>> CreateTokenResponseAsync(TUser user, string accessToken, string refreshToken, Func<TUser, TUserInfo>? mapUser = null)
     {
         var jwtSettings = _configuration.GetSection("JwtSettings");
         var expiryMinutes = int.Parse(jwtSettings["AccessTokenExpiryMinutes"] ?? "60");
@@ -360,11 +362,18 @@ public void SetRefreshTokenCookie(HttpResponse response, string refreshToken, in
             TokenType = "Bearer",
             ExpiresIn = expiryMinutes * 60, // Saniye cinsinden
             IssuedAt = DateTime.Now,
-            User =userInfo 
+            User = userInfo
         };
     }
 
     #endregion
-
+    #region  Helper
+    private string GetUserId(TUser user)
+    {
+        var idProperty = user?.GetType().GetProperty("Id");
+        var idValue = idProperty?.GetValue(user)?.ToString();
+        return !string.IsNullOrEmpty(idValue) ? idValue : Guid.NewGuid().ToString();
+    }
+    #endregion
 }
 

@@ -3650,7 +3650,7 @@
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
-    "version": "1.0.2",
+    "version": "1.0.3",
     "restore": {
       "projectUniqueName": "C:\\Users\\YUNUS EMRE\\Desktop\\AllProject\\Yunus.JwtKit\\Yunus.JwtKit\\Yunus.JwtKit.csproj",
       "projectName": "Yunus.JwtKit",

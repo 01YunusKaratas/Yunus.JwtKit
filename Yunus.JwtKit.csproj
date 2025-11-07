@@ -7,7 +7,7 @@
 
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Yunus.JwtKit</PackageId>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <Authors>Yunus Emre KARATAS</Authors>
     <Company>Yunus.Dev</Company>
     <Description>Generic, extensible JWT &amp; Refresh Token library for ASP.NET Core with User-DTO mapping support.</Description>
