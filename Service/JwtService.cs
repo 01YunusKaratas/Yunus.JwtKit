@@ -282,13 +282,22 @@ public class JwtService<TUser, TUserInfo> : IJwtTokenService<TUser, TUserInfo> w
     }
 
     #region Cookie Operations
+
+    //For Update 1.1.0
+    //For local but changer for Front-end such as react cross platform porject.
+    public bool CookieHttpOnly { get; set; } = false;
+    public bool CookieSecure { get; set; } = false;
+    public SameSiteMode CookieSameSite { get; set; } = SameSiteMode.Lax;
+
+    
+
     public void SetAccessTokenCookie(HttpResponse response, string token, int expiryMinutes)
     {
         var cookieOptions = new CookieOptions
         {
-            HttpOnly = true, //XSS korumasısssssssss
-            Secure = true,
-            SameSite = SameSiteMode.Lax, // Strict değil, Lax!
+            HttpOnly = CookieHttpOnly, //XSS korumasısssssssss
+            Secure = CookieSecure,
+            SameSite =CookieSameSite, // Strict değil, Lax!
             Expires = DateTime.Now.AddMinutes(expiryMinutes),
             Path = "/",
             IsEssential = true
@@ -307,9 +316,9 @@ public class JwtService<TUser, TUserInfo> : IJwtTokenService<TUser, TUserInfo> w
     {
         var cookieOptions = new CookieOptions
         {
-            HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.Lax,
+            HttpOnly = CookieHttpOnly,
+            Secure = CookieSecure,
+            SameSite = CookieSameSite,
             Expires = DateTime.Now.AddDays(expiryDays),
             Path = "/",
             IsEssential = true
@@ -329,9 +338,9 @@ public class JwtService<TUser, TUserInfo> : IJwtTokenService<TUser, TUserInfo> w
     {
         var cookieOptions = new CookieOptions
         {
-            HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.Lax, // Strict değil, Lax!
+            HttpOnly = CookieHttpOnly,
+            Secure = CookieSecure,
+            SameSite = CookieSameSite, // Strict değil, Lax!
             Expires = DateTime.Now.AddDays(-1), // Geçmişe tarih vererek sil
             Path = "/",
             IsEssential = true,
