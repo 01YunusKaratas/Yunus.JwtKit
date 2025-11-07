@@ -32,5 +32,5 @@ I was tired of rewriting JWT services, interfaces, and cookie management over an
 dotnet add package Yunus.JwtKit
 ```
 ## Documentation
-- 🇹🇷 [Türkçe PDF Dokümanı](./docs/Yunus.JwtKit.pdf)
-- 🇬🇧 [English PDF Documentation](./docs/Table%20of%20Contents.pdf) 
+- 🇹🇷 <a href="https://github.com/YunusDev/JwtKit/raw/main/docs/Yunus.JwtKit.pdf" download>Türkçe PDF Dokümanı (indir)</a>  
+- 🇬🇧 <a href="https://github.com/YunusDev/JwtKit/raw/main/docs/Table%20of%20Contents.pdf" download>English PDF Documentation (download)</a>
