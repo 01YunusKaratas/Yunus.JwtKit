@@ -5,31 +5,26 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
+    <!-- NuGet Metadata -->
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Yunus.JwtKit</PackageId>
-    <Version>1.1.0</Version>
-    <Authors>Yunus Emre KARATAS</Authors>
+    <Version>1.1.2</Version>
+    <Authors>Yunus Emre Karataş</Authors>
     <Company>Yunus.Dev</Company>
-    <Description>Generic, extensible JWT &amp; Refresh Token library for ASP.NET Core with User-DTO mapping support.</Description>
-    <PackageTags>JWT;ASP.NET;Identity;Authentication;Security;RefreshToken</PackageTags>
+    <Description>Generic, extensible JWT - Refresh Token library for ASP.NET Core with User-DTO mapping and .NET 8/9 compatibility.</Description>
+    <PackageTags>jwt;aspnetcore;identity;authentication;security;refreshtoken</PackageTags>
     <RepositoryUrl>https://github.com/01YunusKaratas/Yunus.JwtKit</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/01YunusKaratas/Yunus.JwtKit</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageIcon>jwt-image.png</PackageIcon>
     <PackageReleaseNotes>Added .NET 9.0 support and improved cross-version compatibility.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="docs\" />
-    <Folder Include="Models\" />
+    <None Include="jwt-image.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>

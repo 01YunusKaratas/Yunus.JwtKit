@@ -11,7 +11,7 @@
     <description>Generic, extensible JWT &amp; Refresh Token library for ASP.NET Core with User-DTO mapping support.</description>
     <releaseNotes>Added .NET 9.0 support and improved cross-version compatibility.</releaseNotes>
     <tags>JWT ASP.NET Identity Authentication Security RefreshToken</tags>
-    <repository type="git" url="https://github.com/01YunusKaratas/Yunus.JwtKit" commit="8e0ba36fe80907f57d69d8e7841276ae95af68b6" />
+    <repository type="git" url="https://github.com/01YunusKaratas/Yunus.JwtKit" commit="54cda527d91a56f8b2c27e5435644274ef7b1513" />
     <dependencies>
       <group targetFramework="net8.0">
         <dependency id="Microsoft.AspNetCore.Http.Abstractions" version="2.3.0" exclude="Build,Analyzers" />
