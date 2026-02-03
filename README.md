@@ -4,7 +4,6 @@
 > NuGet: [https://www.nuget.org/packages/Yunus.JwtKit](https://www.nuget.org/packages/Yunus.JwtKit)
 
 ---
-
 ##  Purpose
 I was tired of rewriting JWT services, interfaces, and cookie management over and over again in every project.
 **Yunus.JwtKit** breaks this repetition by offering a secure, simple, and extensible framework without building a token system from scratch.
@@ -14,20 +13,16 @@ I was tired of rewriting JWT services, interfaces, and cookie management over an
 > and the immortality of ASP.NET Identity.
 
 ---
-
 ##  Features
 -  Access & Refresh Token generation
 -  Cookie or Header-based token transport
 -  Secure cookie management protected against XSS/CSRF
 -  Fully compatible with ASP.NET Identity (but not required)
 -  Clean Code and Plug-and-Play installation
--  Native, Cross-Origin, Production support  
-
----
-
+-  Native, Cross-Origin, Production support 
 ## SetUp
 
-### 📦 NuGet
+### NuGet
 ```bash
 dotnet add package Yunus.JwtKit
 ```
